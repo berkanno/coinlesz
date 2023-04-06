@@ -17,6 +17,8 @@
               :columnDefs="columnDefs"
               :defaultColDef="defaultColDef"
               :rowData="rowData"
+              rowHeight="40"
+              
             >
             </ag-grid-vue>
           </v-col>
