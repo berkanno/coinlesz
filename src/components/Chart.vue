@@ -23,29 +23,43 @@ export default {
         ? (Math.abs(Number(labelValue)) / 1.0e3).toFixed(2) + " K"
         : Math.abs(Number(labelValue));
     },
+    totalCountCalculate(){
+        this.chartsData.map((x:any)=>{
+            console.log(x)
+        })
+        // console.log(this.totalCount)
+    }
   },
   components: {
     AgChartsVue,
   },
   mounted() {
-    axios.get("https://api.coincap.io/v2/assets").then((res: any) =>
-      res.data.data
-        .filter((x: any) => x.rank < 7)
+    axios.get("https://api.coincap.io/v2/assets").then((res: any) =>{
+
+        res.data.data
+        .filter((x: any) => x)
         .map((x: any) => {
-          this.chartsData[Number(x.rank) - 1].title = x.name;
-          x.marketCapUsd = this.getNumberUnit(x.marketCapUsd);
-          this.chartsData[Number(x.rank) - 1].count = x.marketCapUsd;
-          this.chartsData.push({ title: '', count: 0 });
-        })
-    );
-  },
-  watch: {
-    chartsData: {
-      handler(newValue, oldValue) {
-        console.log(newValue, oldValue);
-      },
-      deep: true,
-    },
-  },
+            if (x.rank < 7) {
+                this.chartsData[Number(x.rank) - 1].title = x.name;
+                // x.marketCapUsd = this.getNumberUnit(x.marketCapUsd);
+                this.chartsData[Number(x.rank) - 1].count = Number(x.marketCapUsd);
+                this.chartsData.push({ title: "", count: 0 });
+            } else {
+                this.chartsData[6].title = "Others";
+                this.chartsData[6].count += Number(x.marketCapUsd);
+            }
+        }
+        )
+        this.totalCountCalculate();
+    }).catch((e:any)=> console.log("hata"))
+  }
+//   watch: {
+//     chartsData: {
+//       handler(newValue, oldValue) {
+//         console.log(newValue, oldValue);
+//       },
+//       deep: true,
+//     },
+//   },
 };
 </script>
