@@ -47,16 +47,13 @@ export default {
         {
           headerName: "Name",
           field: "id",
-          cellStyle: {
-            textAlign: "center",
-          },
         },
-        { headerName: "Change (24Hr)", field: "changePercent24Hr" },
         { headerName: "Price", field: "priceUsd" },
         { headerName: "Market Cap", field: "marketCapUsd" },
         { headerName: "VWAP (24Hr)", field: "vwap24Hr" },
         { headerName: "Supply", field: "supply" },
         { headerName: "Volume (24Hr)", field: "volumeUsd24Hr" },
+        { headerName: "Change (24Hr)", field: "changePercent24Hr" },
       ] as any,
       rowData: [] as any,
       defaultColDef: {
@@ -69,19 +66,28 @@ export default {
   methods: {
     calıstır() {
       this.rowData.map((x: any) => {
-        String((x.marketCapUsd = this.getNumberUnit(Number(x.marketCapUsd))));
+        x.volumeUsd24Hr =
+          "$" + String(this.getNumberUnit(Number(x.volumeUsd24Hr)));
+        x.marketCapUsd =
+          "$" + String(this.getNumberUnit(Number(x.marketCapUsd)));
+        String((x.supply = this.getNumberUnit(Number(x.supply))));
+        x.changePercent24Hr = String(
+          Number(x.changePercent24Hr).toFixed(2) + "%"
+        );
+        x.priceUsd = "$" + String(Number(x.priceUsd).toFixed(2));
+        x.vwap24Hr = "$" + String(Number(x.vwap24Hr).toFixed(2));
       });
     },
     getNumberUnit(labelValue: any) {
       // Nine Zeroes for Billions
       return Math.abs(Number(labelValue)) >= 1.0e9
-        ? (Math.abs(Number(labelValue)) / 1.0e9).toFixed(2) + "B"
+        ? (Math.abs(Number(labelValue)) / 1.0e9).toFixed(2) + " B"
         : // Six Zeroes for Millions
         Math.abs(Number(labelValue)) >= 1.0e6
-        ? (Math.abs(Number(labelValue)) / 1.0e6).toFixed(2) + "M"
+        ? (Math.abs(Number(labelValue)) / 1.0e6).toFixed(2) + " M"
         : // Three Zeroes for Thousands
         Math.abs(Number(labelValue)) >= 1.0e3
-        ? (Math.abs(Number(labelValue)) / 1.0e3).toFixed(2) + "K"
+        ? (Math.abs(Number(labelValue)) / 1.0e3).toFixed(2) + " K"
         : Math.abs(Number(labelValue));
     },
   },
