@@ -13,7 +13,8 @@
             :columnDefs="columnDefs"
             :defaultColDef="defaultColDef"
             :rowData="rowData"
-            rowHeight="40"
+            :rowSelection="rowSelection"
+            :rowHeight="50"
           >
           </ag-grid-vue>
         </v-col>
@@ -62,10 +63,25 @@ export default {
         sortable: true,
         filter: true,
       },
+      rowSelection: null,
     };
   },
   methods: {
-    inter() {},
+    calıstır() {
+      console.log("çalıştı");
+      this.rowData.data.map((x: any) => {
+        Number(x.marketCapUsd);
+        x.marketCapUsd = this.getNumberUnit(x.marketCapUsd);
+      });
+    },
+    getNumberUnit(num: any) {
+      var units = ["M","B","T","Q"]
+    var unit = Math.floor((num / 1.0e+1).toFixed(0).toString().length)
+    var r = unit%3
+    var x =  Math.abs(Number(num))/(Number('1.0e+'+(unit-r)).toFixed(2))
+    return x.toFixed(2)+ ' ' + units[Math.floor(unit / 3) - 2]
+
+    },
   },
   mounted() {
     axios
@@ -73,18 +89,22 @@ export default {
       .then((res: any) => {
         console.log(res.data.data);
         this.rowData = res.data.data;
+        this.calıstır();
       })
       .catch((e: any) => console.log("err"));
+  },
+  created() {
+    this.rowSelection = "multiple" as any;
   },
 };
 </script>
 <style scoped>
 .ag-theme-alpine {
   --ag-borders: none;
-  --ag-header-height: 30px;
-  --ag-header-foreground-color: rgb(255, 255, 255);
+  --ag-header-foreground-color: rgb(255, 0, 0);
   --ag-header-background-color: rgb(0, 0, 0);
   --ag-header-cell-hover-background-color: rgb(70, 0, 91);
   --ag-header-cell-moving-background-color: rgb(255, 255, 255);
+  --ag-selected-row-background-color: rgba(159, 142, 255, 0.603);
 }
 </style>
