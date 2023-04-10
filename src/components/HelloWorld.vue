@@ -92,7 +92,7 @@ export default {
   methods: {
     calıstır() {
       this.rowData.map((x: any) => {
-        x.id = (x.id +"  (  " + x.symbol + "  )  ");
+        x.id = x.id + "  (  " + x.symbol + "  )  ";
         x.volumeUsd24Hr =
           "$" + String(this.getNumberUnit(Number(x.volumeUsd24Hr)));
         x.marketCapUsd =
