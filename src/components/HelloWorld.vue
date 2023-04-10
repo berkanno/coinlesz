@@ -9,7 +9,7 @@
         <v-col cols="11 fill-height">
           <ag-grid-vue
             style="height: 470px; width: 100%"
-            class="ag-theme-alpine font-weight-light text-overline overflow-y text-purple-darken-3"
+            class="ag-theme-alpine font-weight-light text-caption overflow-y text-purple-darken-3"
             :columnDefs="columnDefs"
             :defaultColDef="defaultColDef"
             :rowData="rowData"
@@ -49,11 +49,11 @@ export default {
           headerName: "Name",
           field: "id",
           resizable: true,
-          cellStyle:{
-            fontFamily:"Times New Roman",
-            fontSize:'10px',
-            textAlign:'center',
-          }
+          cellStyle: {
+            fontFamily: "Times New Roman",
+            fontSize: "13px",
+            textAlign: "center",
+          },
         },
         { headerName: "Price", field: "priceUsd", resizable: true },
         { headerName: "Market Cap", field: "marketCapUsd", resizable: true },
@@ -72,14 +72,13 @@ export default {
           headerName: "Change (24Hr)",
           field: "changePercent24Hr",
           resizable: true,
-          cellStyle:((params:any)  => {
-                if (Number(params.data.changePercent24Hr.slice(0, -1)) > 0) {
-                    return {color: 'green',textAlign:'center'};
-                }
-                else {
-                  return {color: 'red',textAlign:'center'};
-                }
-            }),
+          cellStyle: (params: any) => {
+            if (Number(params.data.changePercent24Hr.slice(0, -1)) > 0) {
+              return { color: "green", textAlign: "center", fontWeight: "500" };
+            } else {
+              return { color: "red", textAlign: "center", fontWeight: "500" };
+            }
+          },
         },
       ] as any,
       rowData: [] as any,
@@ -93,6 +92,7 @@ export default {
   methods: {
     calıstır() {
       this.rowData.map((x: any) => {
+        x.id = (x.id +"  (  " + x.symbol + "  )  ");
         x.volumeUsd24Hr =
           "$" + String(this.getNumberUnit(Number(x.volumeUsd24Hr)));
         x.marketCapUsd =
@@ -122,7 +122,6 @@ export default {
     axios
       .get("https://api.coincap.io/v2/assets")
       .then((res: any) => {
-        console.log();
         console.log(res.data.data);
         this.rowData = res.data.data;
         this.calıstır();
@@ -137,12 +136,10 @@ export default {
 <style scoped>
 .ag-theme-alpine {
   --ag-borders: none;
-  --ag-header-cell-label: "justify-content: center";
   --ag-header-foreground-color: rgb(255, 0, 0);
-  --ag-header-row-background-color: rgb(255, 0, 0);
   --ag-header-background-color: rgb(0, 0, 0);
   --ag-header-cell-hover-background-color: rgb(255, 255, 255);
   --ag-header-cell-moving-background-color: rgb(0, 0, 0);
-  --ag-selected-row-background-color: rgba(159, 142, 255, 0.267);
+  --ag-selected-row-background-color: rgba(38, 0, 255, 0.269);
 }
 </style>
