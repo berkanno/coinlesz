@@ -68,19 +68,21 @@ export default {
   },
   methods: {
     calıstır() {
-      console.log("çalıştı");
-      this.rowData.data.map((x: any) => {
-        Number(x.marketCapUsd);
-        x.marketCapUsd = this.getNumberUnit(x.marketCapUsd);
+      this.rowData.map((x: any) => {
+        String((x.marketCapUsd = this.getNumberUnit(Number(x.marketCapUsd))));
       });
     },
-    getNumberUnit(num: any) {
-      var units = ["M","B","T","Q"]
-    var unit = Math.floor((num / 1.0e+1).toFixed(0).toString().length)
-    var r = unit%3
-    var x =  Math.abs(Number(num))/(Number('1.0e+'+(unit-r)).toFixed(2))
-    return x.toFixed(2)+ ' ' + units[Math.floor(unit / 3) - 2]
-
+    getNumberUnit(labelValue: any) {
+      // Nine Zeroes for Billions
+      return Math.abs(Number(labelValue)) >= 1.0e9
+        ? (Math.abs(Number(labelValue)) / 1.0e9).toFixed(2) + "B"
+        : // Six Zeroes for Millions
+        Math.abs(Number(labelValue)) >= 1.0e6
+        ? (Math.abs(Number(labelValue)) / 1.0e6).toFixed(2) + "M"
+        : // Three Zeroes for Thousands
+        Math.abs(Number(labelValue)) >= 1.0e3
+        ? (Math.abs(Number(labelValue)) / 1.0e3).toFixed(2) + "K"
+        : Math.abs(Number(labelValue));
     },
   },
   mounted() {
