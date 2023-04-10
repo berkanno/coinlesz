@@ -14,7 +14,7 @@
             :defaultColDef="defaultColDef"
             :rowData="rowData"
             :rowSelection="rowSelection"
-            :rowHeight="50"
+            :rowHeight="40"
           >
           </ag-grid-vue>
         </v-col>
@@ -53,7 +53,11 @@ export default {
         { headerName: "Price", field: "priceUsd", resizable: true },
         { headerName: "Market Cap", field: "marketCapUsd", resizable: true },
         { headerName: "VWAP (24Hr)", field: "vwap24Hr", resizable: true },
-        { headerName: "Supply", field: "supply", resizable: true },
+        {
+          headerName: "Supply",
+          field: "supply",
+          resizable: true,
+        },
         {
           headerName: "Volume (24Hr)",
           field: "volumeUsd24Hr",
@@ -63,6 +67,14 @@ export default {
           headerName: "Change (24Hr)",
           field: "changePercent24Hr",
           resizable: true,
+          cellStyle:((params:any)  => {
+                if (Number(params.data.changePercent24Hr.slice(0, -1)) > 0) {
+                    return {color: 'green',textAlign:'center'};
+                }
+                else {
+                  return {color: 'red',textAlign:'center'};
+                }
+            }),
         },
       ] as any,
       rowData: [] as any,
@@ -87,6 +99,7 @@ export default {
         x.vwap24Hr = "$" + String(Number(x.vwap24Hr).toFixed(2));
       });
     },
+
     getNumberUnit(labelValue: any) {
       // Nine Zeroes for Billions
       return Math.abs(Number(labelValue)) >= 1.0e9
@@ -104,6 +117,7 @@ export default {
     axios
       .get("https://api.coincap.io/v2/assets")
       .then((res: any) => {
+        console.log();
         console.log(res.data.data);
         this.rowData = res.data.data;
         this.calıstır();
