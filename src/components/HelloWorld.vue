@@ -5,6 +5,7 @@
     </v-app-bar>
 
     <v-container class="mt-16">
+      <Chart />
       <v-row class="mt-16 d-flex justify-center">
         <v-col cols="11 fill-height">
           <ag-grid-vue
@@ -29,10 +30,12 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { AgGridVue } from "ag-grid-vue3";
 import Toolbar from "@/components/Toolbar.vue";
+import Chart from "@/components/Chart.vue";
 export default {
   components: {
     AgGridVue,
     Toolbar,
+    Chart,
   },
   data() {
     return {
@@ -122,7 +125,6 @@ export default {
     axios
       .get("https://api.coincap.io/v2/assets")
       .then((res: any) => {
-        console.log(res.data.data);
         this.rowData = res.data.data;
         this.calıstır();
       })
