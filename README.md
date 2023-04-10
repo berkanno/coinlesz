@@ -1,3 +1,3 @@
 # coinlesz
--axios
--ag-grid
+ - axios
+ - ag-grid
