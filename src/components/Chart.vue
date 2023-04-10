@@ -35,7 +35,7 @@ export default {
           this.chartsData[Number(x.rank) - 1].title = x.name;
           x.marketCapUsd = this.getNumberUnit(x.marketCapUsd);
           this.chartsData[Number(x.rank) - 1].count = x.marketCapUsd;
-          this.chartsData[Number(x.rank)].push("{ title: '', count: 0 }");
+          this.chartsData.push({ title: '', count: 0 });
         })
     );
   },
