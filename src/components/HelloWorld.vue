@@ -81,7 +81,8 @@ export default {
         x.marketCapUsd =
           "$" + String(this.getNumberUnit(Number(x.marketCapUsd)));
         String((x.supply = this.getNumberUnit(Number(x.supply))));
-        x.changePercent24Hr = String(Number(x.changePercent24Hr).toFixed(2));
+        x.changePercent24Hr =
+          String(Number(x.changePercent24Hr).toFixed(2)) + "%";
         x.priceUsd = "$" + String(Number(x.priceUsd).toFixed(2));
         x.vwap24Hr = "$" + String(Number(x.vwap24Hr).toFixed(2));
       });
