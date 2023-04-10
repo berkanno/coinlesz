@@ -8,7 +8,7 @@
       <v-row class="mt-16 d-flex justify-center">
         <v-col cols="11 fill-height">
           <ag-grid-vue
-            style="height: 700px; width: 100%"
+            style="height: 470px; width: 100%"
             class="ag-theme-alpine font-weight-light text-overline overflow-y text-purple-darken-3"
             :columnDefs="columnDefs"
             :defaultColDef="defaultColDef"
@@ -43,17 +43,27 @@ export default {
           cellStyle: {
             textAlign: "center",
           },
+          resizable: true,
         },
         {
           headerName: "Name",
           field: "id",
+          resizable: true,
         },
-        { headerName: "Price", field: "priceUsd" },
-        { headerName: "Market Cap", field: "marketCapUsd" },
-        { headerName: "VWAP (24Hr)", field: "vwap24Hr" },
-        { headerName: "Supply", field: "supply" },
-        { headerName: "Volume (24Hr)", field: "volumeUsd24Hr" },
-        { headerName: "Change (24Hr)", field: "changePercent24Hr" },
+        { headerName: "Price", field: "priceUsd", resizable: true },
+        { headerName: "Market Cap", field: "marketCapUsd", resizable: true },
+        { headerName: "VWAP (24Hr)", field: "vwap24Hr", resizable: true },
+        { headerName: "Supply", field: "supply", resizable: true },
+        {
+          headerName: "Volume (24Hr)",
+          field: "volumeUsd24Hr",
+          resizable: true,
+        },
+        {
+          headerName: "Change (24Hr)",
+          field: "changePercent24Hr",
+          resizable: true,
+        },
       ] as any,
       rowData: [] as any,
       defaultColDef: {
@@ -71,9 +81,7 @@ export default {
         x.marketCapUsd =
           "$" + String(this.getNumberUnit(Number(x.marketCapUsd)));
         String((x.supply = this.getNumberUnit(Number(x.supply))));
-        x.changePercent24Hr = String(
-          Number(x.changePercent24Hr).toFixed(2) + "%"
-        );
+        x.changePercent24Hr = String(Number(x.changePercent24Hr).toFixed(2));
         x.priceUsd = "$" + String(Number(x.priceUsd).toFixed(2));
         x.vwap24Hr = "$" + String(Number(x.vwap24Hr).toFixed(2));
       });
@@ -110,9 +118,10 @@ export default {
 .ag-theme-alpine {
   --ag-borders: none;
   --ag-header-foreground-color: rgb(255, 0, 0);
+  --ag-header-row-background-color: rgb(255, 0, 0);
   --ag-header-background-color: rgb(0, 0, 0);
-  --ag-header-cell-hover-background-color: rgb(70, 0, 91);
-  --ag-header-cell-moving-background-color: rgb(255, 255, 255);
-  --ag-selected-row-background-color: rgba(159, 142, 255, 0.603);
+  --ag-header-cell-hover-background-color: rgb(255, 255, 255);
+  --ag-header-cell-moving-background-color: rgb(0, 0, 0);
+  --ag-selected-row-background-color: rgba(159, 142, 255, 0.726);
 }
 </style>
