@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ag-charts-vue :options="options" ></ag-charts-vue>
+    <ag-charts-vue :options="options"></ag-charts-vue>
   </div>
 </template>
 <script lang="ts">
@@ -15,15 +15,7 @@ export default {
   data() {
     return {
       options: {
-        data: [
-        { name: "Bitcoin", count: 581073939106.4229, countName: "581.07 B" },
-        { name: "Ethereum", count: 231364794197.87198, countName: "231.36 B" },
-        { name: "Tether", count: 80484332095.64056, countName: "80.48 B" },
-        { name: "BNB", count: 55001443799.69881, countName: "55.00 B" },
-        { name: "USD Coin", count: 32422137859.84469, countName: "32.42 B" },
-        { name: "XRP", count: 23886470006.872005, countName: "23.89 B" },
-        { name: "Others", count: 195416937642.99835, countName: "195.42 B" },
-      ],
+        data: [] as any,
         autoSize: true,
         title: {
           text: "Market",
@@ -62,13 +54,13 @@ export default {
               item: {
                 fillOpacity: 0,
                 stroke: "#535455",
-                strokeWidth: 1,
+                strokeWidth: 3,
               },
             },
           },
         ],
         legend: {
-          enabled: false,
+          enabled: true,
         },
       } as any,
       totalCount: 0 as any,
@@ -89,7 +81,6 @@ export default {
         ? (Math.abs(Number(labelValue)) / 1.0e3).toFixed(2) + " K"
         : Math.abs(Number(labelValue));
     },
-
   },
 
   beforeMount() {
@@ -119,7 +110,8 @@ export default {
           this.totalCount += x.count;
         });
         this.totalCountName = this.getNumberUnit(this.totalCount);
-        // this.options.series.data=this.chartsData;
+        this.options.data=this.chartsData;
+        console.log(this.options.data,"çalıştı")
       })
       .catch((e: any) => console.log("hata"));
   },
