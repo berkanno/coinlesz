@@ -1,20 +1,76 @@
 <template>
   <div>
-    <ag-charts-vue :options="options" :series="options.series"></ag-charts-vue>
+    <ag-charts-vue :options="options" ></ag-charts-vue>
   </div>
 </template>
 <script lang="ts">
 import axios from "axios";
 import { AgChartsVue } from "ag-charts-vue3";
-
+import "ag-charts-community";
 export default {
-  name:"Chart",
+  name: "Chart",
   components: {
     AgChartsVue,
   },
   data() {
     return {
-      options: null as any,
+      options: {
+        data: [
+        { name: "Bitcoin", count: 581073939106.4229, countName: "581.07 B" },
+        { name: "Ethereum", count: 231364794197.87198, countName: "231.36 B" },
+        { name: "Tether", count: 80484332095.64056, countName: "80.48 B" },
+        { name: "BNB", count: 55001443799.69881, countName: "55.00 B" },
+        { name: "USD Coin", count: 32422137859.84469, countName: "32.42 B" },
+        { name: "XRP", count: 23886470006.872005, countName: "23.89 B" },
+        { name: "Others", count: 195416937642.99835, countName: "195.42 B" },
+      ],
+        autoSize: true,
+        title: {
+          text: "Market",
+          fontSize: 18,
+        },
+        padding: {
+          top: 32,
+          right: 20,
+          bottom: 32,
+          left: 20,
+        },
+        series: [
+          {
+            type: "pie",
+            calloutLabelKey: "name",
+            sectorLabelKey: "countName",
+            angleKey: "count",
+            sectorLabel: {
+              color: "white",
+              fontWeight: "bold",
+            },
+            calloutLine: {
+              strokeWidth: 2,
+            },
+            fills: [
+              "#49afda",
+              "#57cc8b",
+              "#bcdf72",
+              "#fbeb37",
+              "#f4b944",
+              "#fb7451",
+              "#72508c",
+            ],
+            strokeWidth: 0,
+            highlightStyle: {
+              item: {
+                fillOpacity: 0,
+                stroke: "#535455",
+                strokeWidth: 1,
+              },
+            },
+          },
+        ],
+        legend: {
+          enabled: false,
+        },
+      } as any,
       totalCount: 0 as any,
       totalCountName: "" as any,
       chartsData: [{ name: "", count: 0, countName: "" }] as any,
@@ -33,8 +89,9 @@ export default {
         ? (Math.abs(Number(labelValue)) / 1.0e3).toFixed(2) + " K"
         : Math.abs(Number(labelValue));
     },
+
   },
-  
+
   beforeMount() {
     axios
       .get("https://api.coincap.io/v2/assets")
@@ -44,7 +101,6 @@ export default {
           .map((x: any) => {
             if (x.rank < 7) {
               this.chartsData[Number(x.rank) - 1].name = x.name;
-              // x.marketCapUsd = this.getNumberUnit(x.marketCapUsd);
               this.chartsData[Number(x.rank) - 1].count = Number(
                 x.marketCapUsd
               );
@@ -63,73 +119,18 @@ export default {
           this.totalCount += x.count;
         });
         this.totalCountName = this.getNumberUnit(this.totalCount);
+        // this.options.series.data=this.chartsData;
       })
       .catch((e: any) => console.log("hata"));
   },
-  created() {
-    console.log("çalıştı");
-    console.log(this.chartsData);
-    this.options = {
-      autoSize: true,
-      title: {
-        text: "Market",
-        fontSize: 18,
-      },
-      padding: {
-        top: 32,
-        right: 20,
-        bottom: 32,
-        left: 20,
-      },
-      series: [
-        {
-          data: this.chartsData,
-          type: "pie",
-          calloutLabelKey: "name",
-          sectorLabelKey: "countName",
-          angleKey: "count",
-          calloutLabel: {
-            minAngle: 0,
-          },
-          sectorLabel: {
-            color: "white",
-            fontWeight: "bold",
-          },
-          calloutLine: {
-            strokeWidth: 2,
-          },
-          fills: [
-            "#49afda",
-            "#57cc8b",
-            "#bcdf72",
-            "#fbeb37",
-            "#f4b944",
-            "#fb7451",
-            "#72508c",
-          ],
-          strokeWidth: 0,
-          highlightStyle: {
-            item: {
-              fillOpacity: 0,
-              stroke: "#535455",
-              strokeWidth: 1,
-            },
-          },
-        },
-      ],
-      legend: {
-        enabled: false,
-      },
-    } as any;
-  },
-
   // watch: {
-  //   chartsData: {
+  //   options: {
   //     handler(newValue, oldValue) {
-  //       console.log(newValue, oldValue);
+  //       console.log(newValue == oldValue);
   //     },
   //     deep: true,
   //   },
+  // },
   //   totalCount: {
   //     handler(newValue, oldValue) {
   //       console.log(newValue, oldValue);
