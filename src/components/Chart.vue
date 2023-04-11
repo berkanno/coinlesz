@@ -1,18 +1,20 @@
 <template>
   <div>
-    <v-container>
-      <ag-charts-vue :options="options"></ag-charts-vue>
-    </v-container>
+    <ag-charts-vue :options="options" :series="options.series"></ag-charts-vue>
   </div>
 </template>
 <script lang="ts">
 import axios from "axios";
-import "ag-charts-community";
 import { AgChartsVue } from "ag-charts-vue3";
+
 export default {
+  name:"Chart",
+  components: {
+    AgChartsVue,
+  },
   data() {
     return {
-      options: null,
+      options: null as any,
       totalCount: 0 as any,
       totalCountName: "" as any,
       chartsData: [{ name: "", count: 0, countName: "" }] as any,
@@ -31,93 +33,8 @@ export default {
         ? (Math.abs(Number(labelValue)) / 1.0e3).toFixed(2) + " K"
         : Math.abs(Number(labelValue));
     },
-    totalCountCalculate() {
-      this.chartsData.map((x: any) => {
-        this.totalCount += x.count;
-      });
-      this.totalCountName = this.getNumberUnit(this.totalCount);
-      console.log(this.totalCount, this.totalCountName);
-      this.calıstı();
-    },
-    getData(){
-      return this.chartsData
-    },
-    calıstı(){
-      const numFormatter = new Intl.NumberFormat('en-US');
-      this.options = {
-      autoSize: true,
-      title: {
-        text: 'Religions of London Population',
-        fontSize: 18,
-      },
-      footnote: {
-        text: 'Source: Office for National Statistics',
-      },
-      padding: {
-        top: 32,
-        right: 20,
-        bottom: 32,
-        left: 20,
-      },
-      series: [
-        {
-          data: this.getData(),
-          type: 'pie',
-          calloutLabelKey: 'religion',
-          sectorLabelKey: 'population',
-          angleKey: 'population',
-          calloutLabel: {
-            minAngle: 0,
-          },
-          sectorLabel: {
-            color: 'white',
-            fontWeight: 'bold',
-            formatter: ({ datum, sectorLabelKey } : any) => {
-              return numFormatter.format(datum[sectorLabelKey]);
-            },
-          },
-          calloutLine: {
-            strokeWidth: 2,
-          },
-          fills: [
-            '#49afda',
-            '#57cc8b',
-            '#bcdf72',
-            '#fbeb37',
-            '#f4b944',
-            '#fb7451',
-            '#72508c',
-            '#b7b5ba',
-          ],
-          strokeWidth: 0,
-          tooltip: {
-            renderer: ({ datum, color, calloutLabelKey, sectorLabelKey } : any) => {
-              return [
-                `<div style="background-color: ${color}; padding: 4px 8px; border-top-left-radius: 5px; border-top-right-radius: 5px; font-weight: bold; color: white;">${datum[calloutLabelKey]}</div>`,
-                `<div style="padding: 4px 8px">${numFormatter.format(
-                  datum[sectorLabelKey]
-                )}</div>`,
-              ].join('\n');
-            },
-          },
-          highlightStyle: {
-            item: {
-              fillOpacity: 0,
-              stroke: '#535455',
-              strokeWidth: 1,
-            },
-          } as any,
-        },
-      ],
-      legend: {
-        enabled: false,
-      },
-    };
-    },
   },
-  components: {
-    AgChartsVue,
-  },
+  
   beforeMount() {
     axios
       .get("https://api.coincap.io/v2/assets")
@@ -142,18 +59,89 @@ export default {
               );
             }
           });
-        this.totalCountCalculate();
+        this.chartsData.map((x: any) => {
+          this.totalCount += x.count;
+        });
+        this.totalCountName = this.getNumberUnit(this.totalCount);
       })
       .catch((e: any) => console.log("hata"));
   },
-
-  watch: {
-    chartsData: {
-      handler(newValue, oldValue) {
-        console.log(newValue, oldValue);
+  created() {
+    console.log("çalıştı");
+    console.log(this.chartsData);
+    this.options = {
+      autoSize: true,
+      title: {
+        text: "Market",
+        fontSize: 18,
       },
-      deep: true,
-    },
+      padding: {
+        top: 32,
+        right: 20,
+        bottom: 32,
+        left: 20,
+      },
+      series: [
+        {
+          data: this.chartsData,
+          type: "pie",
+          calloutLabelKey: "name",
+          sectorLabelKey: "countName",
+          angleKey: "count",
+          calloutLabel: {
+            minAngle: 0,
+          },
+          sectorLabel: {
+            color: "white",
+            fontWeight: "bold",
+          },
+          calloutLine: {
+            strokeWidth: 2,
+          },
+          fills: [
+            "#49afda",
+            "#57cc8b",
+            "#bcdf72",
+            "#fbeb37",
+            "#f4b944",
+            "#fb7451",
+            "#72508c",
+          ],
+          strokeWidth: 0,
+          highlightStyle: {
+            item: {
+              fillOpacity: 0,
+              stroke: "#535455",
+              strokeWidth: 1,
+            },
+          },
+        },
+      ],
+      legend: {
+        enabled: false,
+      },
+    } as any;
   },
+
+  // watch: {
+  //   chartsData: {
+  //     handler(newValue, oldValue) {
+  //       console.log(newValue, oldValue);
+  //     },
+  //     deep: true,
+  //   },
+  //   totalCount: {
+  //     handler(newValue, oldValue) {
+  //       console.log(newValue, oldValue);
+  //     },
+  //     deep: true,
+  //   },
+  //   totalCountName: {
+  //     handler(newValue, oldValue) {
+  //       console.log(newValue, oldValue);
+  //     },
+  //     deep: true,
+  //   },
+  // },
 };
 </script>
