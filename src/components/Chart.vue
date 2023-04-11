@@ -1,12 +1,9 @@
 <template>
-<div>
+  <div>
     <v-container>
-
-    <ag-charts-vue
-                    
-                    :options="options"></ag-charts-vue>
+      <ag-charts-vue :options="options"></ag-charts-vue>
     </v-container>
-</div>
+  </div>
 </template>
 <script lang="ts">
 import axios from "axios";
@@ -17,7 +14,8 @@ export default {
     return {
       options: null,
       totalCount: 0 as any,
-      chartsData: [{ title: "", count: 0 }] as any,
+      totalCountName: "" as any,
+      chartsData: [{ title: "", count: 0, countName: "" }] as any,
     };
   },
   methods: {
@@ -37,7 +35,8 @@ export default {
       this.chartsData.map((x: any) => {
         this.totalCount += x.count;
       });
-      console.log(this.totalCount);
+      this.totalCountName = this.getNumberUnit(this.totalCount);
+      console.log(this.totalCount, this.totalCountName);
     },
   },
   components: {
@@ -56,10 +55,15 @@ export default {
               this.chartsData[Number(x.rank) - 1].count = Number(
                 x.marketCapUsd
               );
-              this.chartsData.push({ title: "", count: 0 });
+              this.chartsData[Number(x.rank) - 1].countName =
+                this.getNumberUnit(this.chartsData[Number(x.rank) - 1].count);
+              this.chartsData.push({ title: "", count: 0, countName: "" });
             } else {
               this.chartsData[6].title = "Others";
               this.chartsData[6].count += Number(x.marketCapUsd);
+              this.chartsData[6].countName = this.getNumberUnit(
+                this.chartsData[6].count
+              );
             }
           });
         this.totalCountCalculate();
@@ -71,8 +75,8 @@ export default {
 
     const numFormatter = new Intl.NumberFormat("en-US");
 
-    const total = data.reduce((sum:any, d:any) => sum + d["count"], 0);
-    this.options={
+    const total = data.reduce((sum: any, d: any) => sum + d["count"], 0);
+    this.options = {
       autoSize: true,
       data,
       title: {
@@ -119,7 +123,12 @@ export default {
             },
           },
           tooltip: {
-            renderer: ({ datum, calloutLabelKey, title, sectorLabelKey } : any) => {
+            renderer: ({
+              datum,
+              calloutLabelKey,
+              title,
+              sectorLabelKey,
+            }: any) => {
               return {
                 title,
                 content: `${datum[calloutLabelKey]}: ${numFormatter.format(
@@ -132,13 +141,13 @@ export default {
       ],
     } as any;
   },
-  //   watch: {
-  //     chartsData: {
-  //       handler(newValue, oldValue) {
-  //         console.log(newValue, oldValue);
-  //       },
-  //       deep: true,
-  //     },
-  //   },
+  watch: {
+    chartsData: {
+      handler(newValue, oldValue) {
+        console.log(newValue, oldValue);
+      },
+      deep: true,
+    },
+  },
 };
 </script>
