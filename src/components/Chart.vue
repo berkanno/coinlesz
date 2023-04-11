@@ -110,8 +110,8 @@ export default {
           this.totalCount += x.count;
         });
         this.totalCountName = this.getNumberUnit(this.totalCount);
-        this.options.data=this.chartsData;
-        console.log(this.options.data,"çalıştı")
+        this.options.data=Object.values(this.chartsData);
+         
       })
       .catch((e: any) => console.log("hata"));
   },
