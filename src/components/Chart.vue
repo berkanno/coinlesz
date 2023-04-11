@@ -15,7 +15,7 @@ export default {
       options: null,
       totalCount: 0 as any,
       totalCountName: "" as any,
-      chartsData: [{ title: "", count: 0, countName: "" }] as any,
+      chartsData: [{ name: "", count: 0, countName: "" }] as any,
     };
   },
   methods: {
@@ -37,6 +37,82 @@ export default {
       });
       this.totalCountName = this.getNumberUnit(this.totalCount);
       console.log(this.totalCount, this.totalCountName);
+      this.calıstı();
+    },
+    getData(){
+      return this.chartsData
+    },
+    calıstı(){
+      const numFormatter = new Intl.NumberFormat('en-US');
+      this.options = {
+      autoSize: true,
+      title: {
+        text: 'Religions of London Population',
+        fontSize: 18,
+      },
+      footnote: {
+        text: 'Source: Office for National Statistics',
+      },
+      padding: {
+        top: 32,
+        right: 20,
+        bottom: 32,
+        left: 20,
+      },
+      series: [
+        {
+          data: this.getData(),
+          type: 'pie',
+          calloutLabelKey: 'religion',
+          sectorLabelKey: 'population',
+          angleKey: 'population',
+          calloutLabel: {
+            minAngle: 0,
+          },
+          sectorLabel: {
+            color: 'white',
+            fontWeight: 'bold',
+            formatter: ({ datum, sectorLabelKey } : any) => {
+              return numFormatter.format(datum[sectorLabelKey]);
+            },
+          },
+          calloutLine: {
+            strokeWidth: 2,
+          },
+          fills: [
+            '#49afda',
+            '#57cc8b',
+            '#bcdf72',
+            '#fbeb37',
+            '#f4b944',
+            '#fb7451',
+            '#72508c',
+            '#b7b5ba',
+          ],
+          strokeWidth: 0,
+          tooltip: {
+            renderer: ({ datum, color, calloutLabelKey, sectorLabelKey } : any) => {
+              return [
+                `<div style="background-color: ${color}; padding: 4px 8px; border-top-left-radius: 5px; border-top-right-radius: 5px; font-weight: bold; color: white;">${datum[calloutLabelKey]}</div>`,
+                `<div style="padding: 4px 8px">${numFormatter.format(
+                  datum[sectorLabelKey]
+                )}</div>`,
+              ].join('\n');
+            },
+          },
+          highlightStyle: {
+            item: {
+              fillOpacity: 0,
+              stroke: '#535455',
+              strokeWidth: 1,
+            },
+          } as any,
+        },
+      ],
+      legend: {
+        enabled: false,
+      },
+    };
     },
   },
   components: {
@@ -50,16 +126,16 @@ export default {
           .filter((x: any) => x)
           .map((x: any) => {
             if (x.rank < 7) {
-              this.chartsData[Number(x.rank) - 1].title = x.name;
+              this.chartsData[Number(x.rank) - 1].name = x.name;
               // x.marketCapUsd = this.getNumberUnit(x.marketCapUsd);
               this.chartsData[Number(x.rank) - 1].count = Number(
                 x.marketCapUsd
               );
               this.chartsData[Number(x.rank) - 1].countName =
                 this.getNumberUnit(this.chartsData[Number(x.rank) - 1].count);
-              this.chartsData.push({ title: "", count: 0, countName: "" });
+              this.chartsData.push({ name: "", count: 0, countName: "" });
             } else {
-              this.chartsData[6].title = "Others";
+              this.chartsData[6].name = "Others";
               this.chartsData[6].count += Number(x.marketCapUsd);
               this.chartsData[6].countName = this.getNumberUnit(
                 this.chartsData[6].count
@@ -70,77 +146,7 @@ export default {
       })
       .catch((e: any) => console.log("hata"));
   },
-  created() {
-    const data = this.chartsData;
 
-    const numFormatter = new Intl.NumberFormat("en-US");
-
-    const total = data.reduce((sum: any, d: any) => sum + d["count"], 0);
-    this.options = {
-      autoSize: true,
-      data,
-      title: {
-        text: "MARKET CAP",
-        fontSize: 18,
-        color: "red",
-      },
-      series: [
-        {
-          type: "pie",
-          calloutLabelKey: "type",
-          fillOpacity: 0.9,
-          strokeWidth: 0,
-          angleKey: "count",
-          sectorLabelKey: "count",
-          calloutLabel: {
-            enabled: false,
-          },
-          sectorLabel: {
-            color: "white",
-            fontWeight: "bold",
-            formatter: ({ datum, sectorLabelKey }: any) => {
-              const value = datum[sectorLabelKey];
-              return numFormatter.format(value);
-            },
-          },
-          innerRadiusRatio: 0.5,
-          innerLabels: [
-            {
-              text: numFormatter.format(total),
-              fontSize: 24,
-              fontWeight: "bold",
-            },
-            {
-              text: "Total",
-              fontSize: 16,
-            },
-          ],
-          highlightStyle: {
-            item: {
-              fillOpacity: 0,
-              stroke: "#535455",
-              strokeWidth: 1,
-            },
-          },
-          tooltip: {
-            renderer: ({
-              datum,
-              calloutLabelKey,
-              title,
-              sectorLabelKey,
-            }: any) => {
-              return {
-                title,
-                content: `${datum[calloutLabelKey]}: ${numFormatter.format(
-                  datum[sectorLabelKey]
-                )}`,
-              };
-            },
-          },
-        },
-      ],
-    } as any;
-  },
   watch: {
     chartsData: {
       handler(newValue, oldValue) {
