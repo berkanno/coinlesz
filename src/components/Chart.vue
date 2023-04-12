@@ -64,9 +64,12 @@ export default {
                         accumulator + currentValue,
                       0
                     );
-                    return Math.abs(Number(total)) >= 1.0e9
-                      ? (Math.abs(Number(total)) / 1.0e9).toFixed(2) + " B"
+                    return Math.abs(Number(total)) >= 1.0e12
+                      ? (Math.abs(Number(total)) / 1.0e12).toFixed(2) + " T"
                       : // Six Zeroes for Millions
+                      Math.abs(Number(total)) >= 1.0e9
+                      ? (Math.abs(Number(total)) / 1.0e9).toFixed(2) + " B"
+                      : // Three Zeroes for Thousands
                       Math.abs(Number(total)) >= 1.0e6
                       ? (Math.abs(Number(total)) / 1.0e6).toFixed(2) + " M"
                       : // Three Zeroes for Thousands
