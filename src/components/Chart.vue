@@ -1,6 +1,11 @@
 <template>
   <div>
-    <apexchart type="donut" width="380" :options="chartOptions" :series="series"></apexchart>
+    <apexchart
+      type="donut"
+      width="380"
+      :options="chartOptions"
+      :series="series"
+    ></apexchart>
   </div>
 </template>
 <script lang="ts">
@@ -13,44 +18,55 @@ export default {
   components: {
     apexchart: VueApexCharts,
   },
-  data(){
+  data() {
     return {
       totalCount: 0 as any,
       totalCountName: "" as any,
       chartsData: [{ name: "", count: 0, countName: "" }] as any,
-      series: [44, 55, 41, 17, 15],
-          chartOptions: {
-            chart: {
-              type: 'donut',
-            },
-            responsive: [{
-              breakpoint: 480,
-              options: {
-                chart: {
-                  width: 200
-                },
-                legend: {
-                  position: 'bottom'
-                }
-              }
-            }],
-            plotOptions: {
-              pie: {
-                donut: {
-                  labels: {
-                    show: true,
-                    total: {
-                      showAlways: true,
-                      show: true
-                    }
-                  }
-                }
-              }},
-              title: {
-              text: "Market"
+      series: [] as any,
+      chartOptions: {
+        chart: {
+          type: "donut",
+        },
+        labels: [] as any,
+        dataLabels: {
+          dropShadow: {
+            blur: 3,
+            opacity: 0.8,
+          },
+        },
+        responsive: [
+          {
+            breakpoint: 480,
+            options: {
+              chart: {
+                width: 200,
+              },
+              legend: {
+                position: "bottom",
+              },
             },
           },
-  }},
+        ],
+        plotOptions: {
+          pie: {
+            donut: {
+              labels: {
+                show: true,
+                total: {
+                  showAlways: true,
+                  show: true,
+                },
+              },
+            },
+          },
+        },
+        title: {
+          text: "Market",
+        },
+      },
+    };
+  },
   methods: {
     getNumberUnit(labelValue: any) {
       // Nine Zeroes for Billions
@@ -63,6 +79,18 @@ export default {
         Math.abs(Number(labelValue)) >= 1.0e3
         ? (Math.abs(Number(labelValue)) / 1.0e3).toFixed(2) + " K"
         : Math.abs(Number(labelValue));
+    },
+    getLabels() {
+      if (this.chartsData !== undefined) {
+         this.chartsData.map((x: any) =>
+          this.chartOptions.labels.push(x.name)
+        );
+      }
+    },
+    getSeries() {
+      if (this.chartsData !== undefined) {
+         this.chartsData.map((x: any) => this.series.push(x.count));
+      }
     },
   },
 
@@ -93,6 +121,8 @@ export default {
           this.totalCount += x.count;
         });
         this.totalCountName = this.getNumberUnit(this.totalCount);
+        this.getLabels();
+        this.getSeries();
       })
       .catch((e: any) => console.log("hata"));
   },
