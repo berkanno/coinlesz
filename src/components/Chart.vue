@@ -1,12 +1,15 @@
 <template>
-  <div>
+  <v-row>
+
+  <v-col cols="12" class="text-center">
     <apexchart
       type="donut"
-      width="380"
+      width="60%"
       :options="chartOptions"
       :series="series"
     ></apexchart>
-  </div>
+  </v-col>
+  </v-row>
 </template>
 <script lang="ts">
 import axios from "axios";
@@ -51,11 +54,13 @@ export default {
         plotOptions: {
           pie: {
             donut: {
+              size:"65%",
               labels: {
                 show: true,
                 total: {
                   showAlways: true,
                   show: true,
+                  
                 },
               },
             },
@@ -82,14 +87,12 @@ export default {
     },
     getLabels() {
       if (this.chartsData !== undefined) {
-         this.chartsData.map((x: any) =>
-          this.chartOptions.labels.push(x.name)
-        );
+        this.chartsData.map((x: any) => this.chartOptions.labels.push(x.name));
       }
     },
     getSeries() {
       if (this.chartsData !== undefined) {
-         this.chartsData.map((x: any) => this.series.push(x.count));
+        this.chartsData.map((x: any) => this.series.push(x.count));
       }
     },
   },
