@@ -1,6 +1,6 @@
 <template>
   <div>
-    <apexchart type="pie" width="380" :options="chartOptions" :series="series"></apexchart>
+    <apexchart type="donut" width="380" :options="chartOptions" :series="series"></apexchart>
   </div>
 </template>
 <script lang="ts">
@@ -18,30 +18,38 @@ export default {
       totalCount: 0 as any,
       totalCountName: "" as any,
       chartsData: [{ name: "", count: 0, countName: "" }] as any,
-      series: [44, 55, 13, 43, 22],
-    chartOptions: {
-      chart: {
-        width: 380,
-        type: "pie",
-      },
-      labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
+      series: [44, 55, 41, 17, 15],
+          chartOptions: {
             chart: {
-              width: 200,
+              type: 'donut',
             },
-            legend: {
-              position: "bottom",
+            responsive: [{
+              breakpoint: 480,
+              options: {
+                chart: {
+                  width: 200
+                },
+                legend: {
+                  position: 'bottom'
+                }
+              }
+            }],
+            plotOptions: {
+              pie: {
+                donut: {
+                  labels: {
+                    show: true,
+                    total: {
+                      showAlways: true,
+                      show: true
+                    }
+                  }
+                }
+              }},
+              title: {
+              text: "Market"
             },
           },
-        },
-      ],
-    }
-
-
-
   }},
   methods: {
     getNumberUnit(labelValue: any) {
