@@ -1,68 +1,17 @@
 <template>
   <div>
-    <ag-charts-vue :options="options"></ag-charts-vue>
   </div>
 </template>
 <script lang="ts">
 import axios from "axios";
-import { AgChartsVue } from "ag-charts-vue3";
-import "ag-charts-community";
+
 export default {
   name: "Chart",
   components: {
-    AgChartsVue,
+    
   },
   data() {
     return {
-      options: {
-        data: [] as any,
-        autoSize: true,
-        title: {
-          text: "Market",
-          fontSize: 18,
-        },
-        padding: {
-          top: 32,
-          right: 20,
-          bottom: 32,
-          left: 20,
-        },
-        series: [
-          {
-            type: "pie",
-            calloutLabelKey: "name",
-            sectorLabelKey: "countName",
-            angleKey: "count",
-            sectorLabel: {
-              color: "white",
-              fontWeight: "bold",
-            },
-            calloutLine: {
-              strokeWidth: 2,
-            },
-            fills: [
-              "#49afda",
-              "#57cc8b",
-              "#bcdf72",
-              "#fbeb37",
-              "#f4b944",
-              "#fb7451",
-              "#72508c",
-            ],
-            strokeWidth: 0,
-            highlightStyle: {
-              item: {
-                fillOpacity: 0,
-                stroke: "#535455",
-                strokeWidth: 3,
-              },
-            },
-          },
-        ],
-        legend: {
-          enabled: true,
-        },
-      } as any,
       totalCount: 0 as any,
       totalCountName: "" as any,
       chartsData: [{ name: "", count: 0, countName: "" }] as any,
@@ -110,7 +59,6 @@ export default {
           this.totalCount += x.count;
         });
         this.totalCountName = this.getNumberUnit(this.totalCount);
-        this.options.data=Object.values(this.chartsData);
          
       })
       .catch((e: any) => console.log("hata"));

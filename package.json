@@ -10,9 +10,11 @@
     "@mdi/font": "7.0.96",
     "ag-grid-community": "^29.2.0",
     "ag-grid-vue3": "^29.2.0",
+    "apexcharts": "^3.37.3",
     "axios": "^1.3.5",
     "roboto-fontface": "*",
     "vue": "^3.2.38",
+    "vue3-apexcharts": "^1.4.1",
     "vuetify": "^3.0.0",
     "webfontloader": "^1.0.0"
   },
