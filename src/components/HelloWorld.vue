@@ -5,10 +5,9 @@
     </v-app-bar>
 
     <v-container class="mt-16">
-      <v-col>
+
 
       <Chart />
-      </v-col>
       <v-row class="mt-16 d-flex justify-center">
         <v-col cols="11 fill-height">
           <ag-grid-vue

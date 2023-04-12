@@ -1,14 +1,14 @@
 <template>
-  <v-row>
-
-  <v-col cols="12" class="text-center">
-    <apexchart
-      type="donut"
-      width="60%"
-      :options="chartOptions"
-      :series="series"
-    ></apexchart>
-  </v-col>
+  <v-row justify="center">
+    <v-col cols="7" class="mt-7">
+      <apexchart
+        type="donut"
+        width="100%"
+        height="500"
+        :options="chartOptions"
+        :series="series"
+      ></apexchart>
+    </v-col>
   </v-row>
 </template>
 <script lang="ts">
@@ -43,10 +43,11 @@ export default {
             breakpoint: 480,
             options: {
               chart: {
-                width: 200,
+                width: "100%",
               },
               legend: {
-                position: "bottom",
+                position: "left",
+                offsetY: 200,
               },
             },
           },
@@ -54,13 +55,27 @@ export default {
         plotOptions: {
           pie: {
             donut: {
-              size:"65%",
+              size: "65%",
               labels: {
                 show: true,
                 total: {
-                  showAlways: true,
                   show: true,
-                  
+                  formatter: function (value: any) {
+                    const total = value.config.series.reduce(
+                      (accumulator: any, currentValue: any) =>
+                        accumulator + currentValue,
+                      0
+                    );
+                    return Math.abs(Number(total)) >= 1.0e9
+                      ? (Math.abs(Number(total)) / 1.0e9).toFixed(2) + " B"
+                      : // Six Zeroes for Millions
+                      Math.abs(Number(total)) >= 1.0e6
+                      ? (Math.abs(Number(total)) / 1.0e6).toFixed(2) + " M"
+                      : // Three Zeroes for Thousands
+                      Math.abs(Number(total)) >= 1.0e3
+                      ? (Math.abs(Number(total)) / 1.0e3).toFixed(2) + " K"
+                      : Math.abs(Number(total));
+                  },
                 },
               },
             },
@@ -68,6 +83,12 @@ export default {
         },
         title: {
           text: "Market",
+          align: "center",
+          style: {
+            color: "red",
+            fontWeight: "thin",
+            fontSize: "40px",
+          },
         },
       },
     };
