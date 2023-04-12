@@ -93,7 +93,7 @@ export default {
           },
         },
         title: {
-          text: "Market",
+          text: "Market Cap",
           align: "center",
           style: {
             color: "red",
@@ -141,26 +141,5 @@ export default {
       })
       .catch((e: any) => console.log("hata"));
   },
-  // watch: {
-  //   options: {
-  //     handler(newValue, oldValue) {
-  //       console.log(newValue == oldValue);
-  //     },
-  //     deep: true,
-  //   },
-  // },
-  //   totalCount: {
-  //     handler(newValue, oldValue) {
-  //       console.log(newValue, oldValue);
-  //     },
-  //     deep: true,
-  //   },
-  //   totalCountName: {
-  //     handler(newValue, oldValue) {
-  //       console.log(newValue, oldValue);
-  //     },
-  //     deep: true,
-  //   },
-  // },
 };
 </script>
