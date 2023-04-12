@@ -23,9 +23,7 @@ export default {
   },
   data() {
     return {
-      totalCount: 0 as any,
-      totalCountName: "" as any,
-      chartsData: [{ name: "", count: 0, countName: "" }] as any,
+      chartsData: [{ name: "", count: 0 }] as any,
       series: [] as any,
       chartOptions: {
         chart: {
@@ -77,6 +75,19 @@ export default {
                       : Math.abs(Number(total));
                   },
                 },
+                value: {
+                  formatter: function (value: any) {
+                    return Math.abs(Number(value)) >= 1.0e9
+                      ? (Math.abs(Number(value)) / 1.0e9).toFixed(2) + " B"
+                      : // Six Zeroes for Millions
+                      Math.abs(Number(value)) >= 1.0e6
+                      ? (Math.abs(Number(value)) / 1.0e6).toFixed(2) + " M"
+                      : // Three Zeroes for Thousands
+                      Math.abs(Number(value)) >= 1.0e3
+                      ? (Math.abs(Number(value)) / 1.0e3).toFixed(2) + " K"
+                      : Math.abs(Number(value));
+                  },
+                },
               },
             },
           },
@@ -94,18 +105,6 @@ export default {
     };
   },
   methods: {
-    getNumberUnit(labelValue: any) {
-      // Nine Zeroes for Billions
-      return Math.abs(Number(labelValue)) >= 1.0e9
-        ? (Math.abs(Number(labelValue)) / 1.0e9).toFixed(2) + " B"
-        : // Six Zeroes for Millions
-        Math.abs(Number(labelValue)) >= 1.0e6
-        ? (Math.abs(Number(labelValue)) / 1.0e6).toFixed(2) + " M"
-        : // Three Zeroes for Thousands
-        Math.abs(Number(labelValue)) >= 1.0e3
-        ? (Math.abs(Number(labelValue)) / 1.0e3).toFixed(2) + " K"
-        : Math.abs(Number(labelValue));
-    },
     getLabels() {
       if (this.chartsData !== undefined) {
         this.chartsData.map((x: any) => this.chartOptions.labels.push(x.name));
@@ -131,20 +130,12 @@ export default {
                 x.marketCapUsd
               );
               this.chartsData[Number(x.rank) - 1].countName =
-                this.getNumberUnit(this.chartsData[Number(x.rank) - 1].count);
-              this.chartsData.push({ name: "", count: 0, countName: "" });
+                this.chartsData.push({ name: "", count: 0 });
             } else {
               this.chartsData[6].name = "Others";
               this.chartsData[6].count += Number(x.marketCapUsd);
-              this.chartsData[6].countName = this.getNumberUnit(
-                this.chartsData[6].count
-              );
             }
           });
-        this.chartsData.map((x: any) => {
-          this.totalCount += x.count;
-        });
-        this.totalCountName = this.getNumberUnit(this.totalCount);
         this.getLabels();
         this.getSeries();
       })
