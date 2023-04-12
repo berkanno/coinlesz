@@ -1,22 +1,48 @@
 <template>
   <div>
+    <apexchart type="pie" width="380" :options="chartOptions" :series="series"></apexchart>
   </div>
 </template>
 <script lang="ts">
 import axios from "axios";
+import VueApexCharts from "vue3-apexcharts";
 
 export default {
   name: "Chart",
+
   components: {
-    
+    apexchart: VueApexCharts,
   },
-  data() {
+  data(){
     return {
       totalCount: 0 as any,
       totalCountName: "" as any,
       chartsData: [{ name: "", count: 0, countName: "" }] as any,
-    };
-  },
+      series: [44, 55, 13, 43, 22],
+    chartOptions: {
+      chart: {
+        width: 380,
+        type: "pie",
+      },
+      labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200,
+            },
+            legend: {
+              position: "bottom",
+            },
+          },
+        },
+      ],
+    }
+
+
+
+  }},
   methods: {
     getNumberUnit(labelValue: any) {
       // Nine Zeroes for Billions
@@ -59,7 +85,6 @@ export default {
           this.totalCount += x.count;
         });
         this.totalCountName = this.getNumberUnit(this.totalCount);
-         
       })
       .catch((e: any) => console.log("hata"));
   },
