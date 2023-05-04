@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col cols="7" class="mt-7">
+    <v-col cols="7" class="mt-16">
       <apexchart
         type="donut"
         width="100%"
@@ -93,15 +93,6 @@ export default {
                 },
               },
             },
-          },
-        },
-        title: {
-          text: "Market Cap",
-          align: "center",
-          style: {
-            color: "red",
-            fontWeight: "thin",
-            fontSize: "40px",
           },
         },
       },

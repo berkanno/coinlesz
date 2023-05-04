@@ -2,14 +2,25 @@
   <v-app>
     <v-app-bar style="position: fixed" flat height="100%">
       <Toolbar />
+
+
+
     </v-app-bar>
 
+
+
     <v-container class="mt-16">
-
-
-      <Chart />
-      <v-row class="mt-16 d-flex justify-center">
-        <v-col cols="11 fill-height">
+      <v-tabs v-model="tabs" bg-color="black" class="text-red">
+								<v-tab value="grid"><span style="letter-spacing:10px"> Coins
+                  </span><v-icon icon="mdi-bitcoin" class="ml-3" color="white"></v-icon></v-tab>
+								<v-tab value="chart"> <span style="letter-spacing:5px">Market Cap
+                  </span> <v-icon icon="mdi-currency-usd" class="ml-3" color="white"></v-icon></v-tab>
+							</v-tabs>
+<v-window v-model="tabs" show-arrows="true">
+  
+  <v-window-item value="grid">
+          <v-row class="mt-16 d-flex justify-center">
+        <v-col cols="10 fill-height" class="text-center">
           <ag-grid-vue
             style="height: 470px; width: 100%"
             class="ag-theme-alpine font-weight-light text-caption overflow-y text-purple-darken-3"
@@ -22,6 +33,12 @@
           </ag-grid-vue>
         </v-col>
       </v-row>
+  </v-window-item><v-window-item value="chart">
+      <Chart />
+
+  </v-window-item>
+</v-window>
+
     </v-container>
   </v-app>
 </template>
@@ -41,6 +58,7 @@ export default {
   },
   data() {
     return {
+      tabs: "grid",
       columnDefs: [
         {
           headerName: "Rank",
